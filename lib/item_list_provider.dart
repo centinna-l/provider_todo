@@ -106,7 +106,7 @@ class StateProvider with ChangeNotifier {
   }
 
   Future<void> authenticate(String email, String password, String url) async {
-    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDbu8xbACev8qm_tQNFkvovTu-uDa63NQ0';
+    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyDbu8xbACev8qm_tQNFkvovTu-uDa63NQ0';
     try {
       print(myUrl);
       final loginResponse = await http.post(Uri.parse(myUrl),
@@ -156,6 +156,9 @@ class StateProvider with ChangeNotifier {
   }
   Future<void> login(String email, String password) async {
     return authenticate(email, password, 'signInWithPassword');
+  }
+  Future<void> signup(String email, String password) async {
+    return authenticate(email, password, 'signUp');
   }
 }
 

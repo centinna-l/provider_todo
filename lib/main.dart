@@ -4,7 +4,7 @@ import 'package:flutter_state_management/item_list_provider.dart';
 import 'package:flutter_state_management/item_view.dart';
 import 'package:flutter_state_management/todo_model.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
 
 void main() {
@@ -42,6 +42,18 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Todo App'),
         centerTitle: true,
+        actions: [
+          InkWell(
+            onTap: ()async{
+              await Provider.of<StateProvider>(context, listen: false).logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+              child:
+              Icon(Icons.logout))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
