@@ -44,7 +44,10 @@ class _SignUPState extends State<SignUP> {
                   return null;
                 },controller: passwordController,decoration: InputDecoration( fillColor: Colors.grey,hintText: "password", enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),),
                 SizedBox(height: 30,),
-                Container(color: Colors.blue,child: TextButton( child: Text("Sign UP"),onPressed: onSubmit)),
+                Container(decoration:BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(10)
+                ),child: TextButton( child: Text("Sign UP",style: TextStyle(color: Colors.white),),onPressed: onSubmit)),
                 SizedBox(height: 80,),
               ],
             )

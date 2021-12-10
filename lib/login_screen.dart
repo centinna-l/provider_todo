@@ -11,7 +11,6 @@ import 'package:flutter_state_management/signup_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_state_management/item_list_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,19 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState(){
-    checkUserExist();
+
     super.initState();
   }
 
-  checkUserExist()async{
-  bool _userexist =  await Provider.of<StateProvider>(context, listen: false).tryAutoLogin();
-  if(_userexist){
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
-    );
-  }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },controller: passwordController,decoration: InputDecoration( fillColor: Colors.grey,hintText: "password", enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),),
                 SizedBox(height: 30,),
-                Container(color: Colors.blue,child: TextButton( child: Text("Submit"),onPressed: onSubmit)),
+                Container(decoration:BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10)
+                ),child: TextButton( child: Text("Submit",style: TextStyle(color: Colors.white),),onPressed: onSubmit)),
                 SizedBox(height: 80,),
                 RichText(
                   text: TextSpan(

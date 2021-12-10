@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/item_list_provider.dart';
 import 'package:flutter_state_management/item_view.dart';
+import 'package:flutter_state_management/splash_screen.dart';
 import 'package:flutter_state_management/todo_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(),
+      home: WelcomeScreen(),
     );
   }
 }

@@ -49,9 +49,32 @@ class StateProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewTask(String description) {
+  void addNewTask(String description) async{
     if (description != null && description != '') {
       items.add(Todo(description));
+      final url =
+
+          'https://todo-34182-default-rtdb.firebaseio.com/tasktodo';
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          body: json.encode({
+            'title': description
+          }),
+        );
+        print(response.statusCode.runtimeType);
+        print(response.body);
+
+          if(response.statusCode==200){
+          final _todo= new Todo(
+              description
+          );
+          items.add(_todo);
+          notifyListeners();
+        }
+      }catch(e){
+        print(e);
+      }
       notifyListeners();
     }
   }
@@ -106,7 +129,7 @@ class StateProvider with ChangeNotifier {
   }
 
   Future<void> authenticate(String email, String password, String url) async {
-    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyDbu8xbACev8qm_tQNFkvovTu-uDa63NQ0';
+    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyB3zWvdNzmdiXl7scw4fhiUHokeZLELwwU';
     try {
       print(myUrl);
       final loginResponse = await http.post(Uri.parse(myUrl),
@@ -161,6 +184,8 @@ class StateProvider with ChangeNotifier {
     return authenticate(email, password, 'signUp');
   }
 }
+
+
 
 
 
