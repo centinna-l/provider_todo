@@ -53,7 +53,6 @@ class StateProvider with ChangeNotifier {
     if (description != null && description != '') {
       items.add(Todo(description));
       final url =
-
           'https://todo-34182-default-rtdb.firebaseio.com/tasktodo';
       try {
         final response = await http.post(
