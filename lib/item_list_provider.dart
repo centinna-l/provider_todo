@@ -138,7 +138,23 @@ class StateProvider with ChangeNotifier {
      return userD["userId"];
 
   }
-
+  Future<void> updateProduct(String description, Todo newProduct) async {
+    final prodIndex = items.indexWhere((prod) => prod.description == description);
+    if (prodIndex >= 0) {
+      final url =
+          'https://providetodo-default-rtdb.firebaseio.com/task.json';
+      await http.patch(Uri.parse(url),
+          body: json.encode({
+            'title': description,
+            "status": false,
+            'userId': fetchData().toString()
+          }));
+      items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
 
   Future<void> authenticate(String email, String password, String url) async {
     final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyDbu8xbACev8qm_tQNFkvovTu-uDa63NQ0';
