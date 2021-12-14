@@ -43,6 +43,18 @@ class StateProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchAllTask() async{
+
+    final fetchUrl = "https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy=userId&equalTo=suaQhWXuvsYX4LmJrr2NajaWHMh1";
+
+    final listResponseData = await http.get(Uri.parse(fetchUrl));
+
+    final finalData = json.decode(listResponseData.body);
+
+
+  }
+
+
   void removeItem(Todo item) {
     items.remove(item);
 
