@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_state_management/modal.dart';
 import 'package:flutter_state_management/todo_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,13 +44,17 @@ class StateProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllTask() async{
+  Future<Welcome> fetchAllTask() async{
 
-    final fetchUrl = "https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy=userId&equalTo=suaQhWXuvsYX4LmJrr2NajaWHMh1";
+    final fetchUrl = 'https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy="userId"&equalTo="suaQhWXuvsYX4LmJrr2NajaWHMh1"';
 
     final listResponseData = await http.get(Uri.parse(fetchUrl));
+    print(listResponseData.statusCode);
 
-    final finalData = json.decode(listResponseData.body);
+    final returningData = welcomeFromJson(listResponseData.body);
+    print(returningData.toString());
+    return returningData;
+    //final finalData = json.decode(listResponseData.body);
 
 
   }
@@ -68,7 +73,7 @@ class StateProvider with ChangeNotifier {
     Map<String, dynamic> userD = jsonDecode(usedData);
     print(userD["userId"]);
     if (description != null && description != '') {
-      items.add(Todo(description));
+      //items.add(Todo(description));
       final url =
           'https://providetodo-default-rtdb.firebaseio.com/task.json';
       try {

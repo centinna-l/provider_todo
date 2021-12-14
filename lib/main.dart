@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/item_list_provider.dart';
 import 'package:flutter_state_management/item_view.dart';
+import 'package:flutter_state_management/modal.dart';
 import 'package:flutter_state_management/splash_screen.dart';
 import 'package:flutter_state_management/todo_model.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<Welcome> welObj;
+
+  @override
+  void initState() {
+    welObj =context.read<StateProvider>().fetchAllTask();
+    print(welObj);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

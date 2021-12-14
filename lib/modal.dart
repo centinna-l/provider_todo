@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-Map<String, Welcome> FetchingDataFromJson(String str) => Map.from(json.decode(str)).map((k, v) => MapEntry<String, Welcome>(k, Welcome.fromJson(v)));
+Map<String, Welcome> welcomeFromJson(String str) => Map.from(json.decode(str)).map((k, v) => MapEntry<String, Welcome>(k, Welcome.fromJson(v)));
 
 String welcomeToJson(Map<String, Welcome> data) => json.encode(Map.from(data).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())));
 
