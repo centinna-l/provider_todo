@@ -50,6 +50,11 @@ class StateProvider with ChangeNotifier {
   }
 
   void addNewTask(String description) async{
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    String usedData = shared.getString("userData");
+    print("used"+usedData);
+    Map<String, dynamic> userD = jsonDecode(usedData);
+    print(userD["userId"]);
     if (description != null && description != '') {
       items.add(Todo(description));
       final url =
@@ -60,7 +65,7 @@ class StateProvider with ChangeNotifier {
           body: json.encode({
             'title': description,
             "status": false,
-            'userId': fetchData().toString()
+            'userId': userD["userId"]
           }),
         );
         print(response.statusCode.runtimeType);
