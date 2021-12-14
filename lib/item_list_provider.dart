@@ -53,12 +53,14 @@ class StateProvider with ChangeNotifier {
     if (description != null && description != '') {
       items.add(Todo(description));
       final url =
-          'https://todo-34182-default-rtdb.firebaseio.com/tasktodo';
+          'https://providetodo-default-rtdb.firebaseio.com/task.json';
       try {
         final response = await http.post(
           Uri.parse(url),
           body: json.encode({
-            'title': description
+            'title': description,
+            "status": false,
+            'userId': fetchData().toString()
           }),
         );
         print(response.statusCode.runtimeType);
@@ -127,8 +129,19 @@ class StateProvider with ChangeNotifier {
     _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
   }
 
+    Future<String> fetchData()async {
+     SharedPreferences shared = await SharedPreferences.getInstance();
+     String usedData = shared.getString("userData");
+     print("used"+usedData);
+     Map<String, dynamic> userD = jsonDecode(usedData);
+     print(userD["userId"]);
+     return userD["userId"];
+
+  }
+
+
   Future<void> authenticate(String email, String password, String url) async {
-    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyB3zWvdNzmdiXl7scw4fhiUHokeZLELwwU';
+    final myUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:$url?key=AIzaSyDbu8xbACev8qm_tQNFkvovTu-uDa63NQ0';
     try {
       print(myUrl);
       final loginResponse = await http.post(Uri.parse(myUrl),
