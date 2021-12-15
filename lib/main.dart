@@ -38,13 +38,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<Welcome> welObj;
+ bool _isInit =true;
+ bool _isLoading =false;
 
   @override
   void initState() {
-    welObj =context.read<StateProvider>().fetchAllTask();
-    print(welObj);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<StateProvider>(context).fetchAllUserTodo().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override

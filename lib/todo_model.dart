@@ -1,6 +1,6 @@
 class Todo {
-  String description;
+  String description,userId,randomId;
   bool complete;
 
-  Todo(this.description, {this.complete = false});
+  Todo(this.description, this.userId,this.randomId,{this.complete = false});
 }

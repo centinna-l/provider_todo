@@ -44,21 +44,36 @@ class StateProvider with ChangeNotifier {
     }
   }
 
-  Future<Welcome> fetchAllTask() async{
 
-    final fetchUrl = 'https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy="userId"&equalTo="suaQhWXuvsYX4LmJrr2NajaWHMh1"';
-
-    final listResponseData = await http.get(Uri.parse(fetchUrl));
-    print(listResponseData.statusCode);
-
-    final returningData = welcomeFromJson(listResponseData.body);
-    print(returningData.toString());
-    return returningData;
-    //final finalData = json.decode(listResponseData.body);
-
-
+  Future<void> fetchAllUserTodo() async {
+    var url = Uri.parse('https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy="userId"&equalTo="suaQhWXuvsYX4LmJrr2NajaWHMh1"');
+    final response = await http.get(url);
+    print("hello this is response${response.body}");
+    print("hellofromresponsecode${response.statusCode}");
+    if(response.statusCode == 200){
+      print("am from response");
+      //final userpage =welcomeFromJson(response.body);
+      final List<Todo> loadedProducts = [];
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if(extractedData==null){
+        return;
+      }
+      extractedData.forEach((id, task) {
+        loadedProducts.add(Todo(
+             task['title'],
+            task['userId'],
+            id,
+            complete:task['status']
+        ));
+      });
+      print(loadedProducts);
+      items =loadedProducts;
+      notifyListeners();
+    }else{
+      print('Error!!');
+      throw Exception('Failed to Load Post');
+    }
   }
-
 
   void removeItem(Todo item) {
     items.remove(item);
@@ -82,6 +97,7 @@ class StateProvider with ChangeNotifier {
           body: json.encode({
             'title': description,
             "status": false,
+            "randomId":"",
             'userId': userD["userId"]
           }),
         );
@@ -90,7 +106,10 @@ class StateProvider with ChangeNotifier {
 
           if(response.statusCode==200){
           final _todo= new Todo(
-              description
+               description,
+              userD["userId"],
+             '',
+            complete: false
           );
           items.add(_todo);
           notifyListeners();
