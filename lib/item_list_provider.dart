@@ -36,17 +36,31 @@ class StateProvider with ChangeNotifier {
   List<Todo> items = List<Todo>.empty(growable: true);
 
   // Operations
-  void editTask(Todo item, String description) {
+  void editTask(Todo item, String description)async {
     if (description != null && description != '') {
+      final prodIndex = items.indexWhere((prod) => prod.userId == item.userId);
       item.description = description;
-
+      final url =
+          'https://providetodo-default-rtdb.firebaseio.com/task/${item.randomId}.json';
+      await http.patch(Uri.parse(url),
+          body: json.encode({
+            'title': description,
+            "status": false,
+            "randomId":item.randomId,
+          }));
+      items[prodIndex] = item;
       notifyListeners();
     }
   }
 
 
   Future<void> fetchAllUserTodo() async {
-    var url = Uri.parse('https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy="userId"&equalTo="suaQhWXuvsYX4LmJrr2NajaWHMh1"');
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    String usedData = shared.getString("userData");
+    print("used"+usedData);
+    Map<String, dynamic> userD = jsonDecode(usedData);
+    print(userD["userId"]);
+    var url = Uri.parse('https://providetodo-default-rtdb.firebaseio.com/task.json?orderBy="userId"&equalTo="${userD["userId"]}"');
     final response = await http.get(url);
     print("hello this is response${response.body}");
     print("hellofromresponsecode${response.statusCode}");
@@ -75,10 +89,14 @@ class StateProvider with ChangeNotifier {
     }
   }
 
-  void removeItem(Todo item) {
-    items.remove(item);
-
-    notifyListeners();
+  void removeItem(Todo item)async {
+    final url =
+        'https://providetodo-default-rtdb.firebaseio.com/task/${item.randomId}.json';
+    final response = await http.delete(Uri.parse(url));
+    if(response.statusCode==200){
+      items.remove(item);
+      notifyListeners();
+    }
   }
 
   void addNewTask(String description) async{
@@ -108,7 +126,7 @@ class StateProvider with ChangeNotifier {
           final _todo= new Todo(
                description,
               userD["userId"],
-             '',
+              json.decode(response.body)['name'],
             complete: false
           );
           items.add(_todo);
@@ -121,7 +139,13 @@ class StateProvider with ChangeNotifier {
     }
   }
 
-  void chanceCompleteness(Todo item) {
+  void chanceCompleteness(Todo item) async {
+    final url =
+        'https://providetodo-default-rtdb.firebaseio.com/task/${item.randomId}.json';
+    await http.patch(Uri.parse(url),
+        body: json.encode({
+          "status": !item.complete,
+        }));
     item.complete = !item.complete;
     notifyListeners();
   }

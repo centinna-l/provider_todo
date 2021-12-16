@@ -14,11 +14,15 @@ class ItemView extends StatefulWidget {
 
 class _ItemViewState extends State<ItemView> {
   TextEditingController _textEditingController = TextEditingController();
-
+  String id='';
+  String randomid="";
   @override
   void initState() {
-    if (widget.item != null)
+    if (widget.item != null) {
       _textEditingController.text = widget.item.description;
+      id = widget.item.userId;
+      randomid = widget.item.randomId;
+    }
     super.initState();
   }
 
